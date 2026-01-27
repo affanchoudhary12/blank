@@ -19,26 +19,53 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
-        .bg-animation {
+        .bg-gradient {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, #0a0512 0%, #1a0a2e 25%, #2d1b3d 50%, #3d1a3d 75%, #0a0512 100%);
+            background: linear-gradient(135deg, 
+                #0a0512 0%, 
+                #1a0a2e 20%, 
+                #2d1b3d 40%, 
+                #3d1a3d 60%,
+                #4a1942 80%,
+                #0a0512 100%);
             background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientFlow 20s ease infinite;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Landing Page */
+        .particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 107, 157, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 25s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .landing {
             height: 100vh;
             display: flex;
@@ -48,36 +75,168 @@
             position: relative;
         }
 
+        .landing::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(196, 69, 105, 0.4), transparent);
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: pulseGlow 5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
         .landing-name {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5rem, 12vw, 7rem);
+            font-size: clamp(4rem, 15vw, 8rem);
             font-weight: 900;
-            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 25%, #a8385d 50%, #ffa07a 75%, #ff6b9d 100%);
-            background-size: 200% 200%;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 25%, #ffa07a 50%, #ff6b9d 75%, #c44569 100%);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 25px;
-            animation: textGlow 3s ease-in-out infinite;
-            letter-spacing: 5px;
+            margin-bottom: 30px;
+            animation: nameGlow 4s ease-in-out infinite, gradientFlow 8s ease infinite;
+            letter-spacing: 8px;
             z-index: 2;
         }
 
-        @keyframes textGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.6)); }
-            50% { filter: drop-shadow(0 0 40px rgba(196, 69, 105, 0.9)); }
+        @keyframes nameGlow {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.8)); }
+            50% { filter: drop-shadow(0 0 60px rgba(196, 69, 105, 1)); }
         }
 
         .landing-tagline {
-            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
             color: #ffa07a;
-            margin-bottom: 50px;
-            letter-spacing: 3px;
+            margin-bottom: 60px;
+            letter-spacing: 4px;
             opacity: 0;
-            animation: fadeInUp 1.2s 0.5s ease forwards;
+            animation: fadeInUp 1.5s 0.5s ease forwards;
             z-index: 2;
         }
 
         @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.15));
+            border: 3px solid #ff6b9d;
+            color: #fff;
+            padding: 22px 65px;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.5s ease;
+            opacity: 0;
+            animation: fadeInUp 1.5s 1s ease forwards;
+            z-index: 2;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.4);
+            border-radius: 5px;
+        }
+
+        .enter-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(196, 69, 105, 0.2));
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(255, 107, 157, 0.6);
+        }
+
+        .main-container {
+            display: none;
+        }
+
+        .main-container.active {
+            display: block;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 60px;
+            background: rgba(10, 5, 18, 0.9);
+            backdrop-filter: blur(30px);
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ffa07a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu li {
+            color: #ffa07a;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-menu li::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff6b9d, transparent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu li:hover::after,
+        .nav-menu li.active::after {
+            width: 100%;
+        }
+
+        .nav-menu li:hover,
+        .nav-menu li.active {
+            color: #ff6b9d;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 150px 30px 80px;
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageReveal 1s ease;
+        }
+
+        @keyframes pageReveal {
             from {
                 opacity: 0;
                 transform: translateY(40px);
@@ -88,98 +247,102 @@
             }
         }
 
-        .enter-btn {
-            background: rgba(255, 107, 157, 0.15);
-            border: 2px solid #ff6b9d;
-            color: #fff;
-            padding: 18px 55px;
-            font-size: 1.1rem;
-            letter-spacing: 4px;
-            cursor: pointer;
-            backdrop-filter: blur(15px);
-            transition: all 0.4s ease;
-            position: relative;
-            opacity: 0;
-            animation: fadeInUp 1.2s 1s ease forwards;
-            z-index: 2;
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.3);
-        }
-
-        .enter-btn:hover {
-            background: rgba(255, 107, 157, 0.25);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(255, 107, 157, 0.5);
-        }
-
-        /* Main Container */
-        .main-container {
-            display: none;
-        }
-
-        .main-container.active {
-            display: block;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 25px 50px;
-            background: rgba(10, 5, 18, 0.85);
-            backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255, 107, 157, 0.3);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
+        .page-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #ff6b9d, #ffa07a);
+            font-size: clamp(2.8rem, 9vw, 5rem);
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 30%, #ffa07a 60%, #ff6b9d 100%);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 70px;
+            text-align: center;
             font-weight: 900;
+            animation: gradientFlow 6s ease infinite;
         }
 
-        .nav-menu {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-            flex-wrap: wrap;
+        .content-card {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.06));
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 25px;
+            padding: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s ease;
         }
 
-        .nav-menu li {
-            color: #ffa07a;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
+        .content-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 80px rgba(255, 107, 157, 0.3);
+        }
+
+        .content-card p {
+            color: #ffc5d9;
+            line-height: 2.2;
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dreams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            margin: 80px auto;
+        }
+
+        .dream-card {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.06));
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 25px;
+            padding: 45px;
+            backdrop-filter: blur(20px);
+            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
 
-        .nav-menu li:hover,
-        .nav-menu li.active {
+        .dream-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 30px 80px rgba(255, 107, 157, 0.4);
+        }
+
+        .dream-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+        }
+
+        .dream-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
             color: #ff6b9d;
+            margin-bottom: 18px;
         }
 
-        /* Pages */
-        .page {
-            min-height: 100vh;
-            padding: 130px 25px 60px;
+        .dream-card p {
+            color: #ffc5d9;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        .dream-expanded {
             display: none;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(255, 107, 157, 0.3);
+            animation: expandFade 0.5s ease;
         }
 
-        .page.active {
+        .dream-card.expanded .dream-expanded {
             display: block;
-            animation: pageSlide 0.8s ease;
         }
 
-        @keyframes pageSlide {
+        @keyframes expandFade {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-15px);
             }
             to {
                 opacity: 1;
@@ -187,204 +350,87 @@
             }
         }
 
-        .page-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ffa07a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 60px;
-            text-align: center;
-            font-weight: 900;
-        }
-
-        .content-card {
-            max-width: 750px;
-            margin: 0 auto 35px;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.08), rgba(196, 69, 105, 0.05));
-            border: 1px solid rgba(255, 107, 157, 0.25);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .content-card p {
-            color: #ffc5d9;
-            line-height: 2;
-            font-size: 1.05rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        /* Timeline */
-        .timeline {
-            max-width: 750px;
-            margin: 60px auto;
-            position: relative;
-            padding-left: 50px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to bottom, #ff6b9d, #c44569, transparent);
-        }
-
-        .timeline-item {
-            margin-bottom: 60px;
-            position: relative;
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.06), rgba(196, 69, 105, 0.03));
-            border: 1px solid rgba(255, 107, 157, 0.2);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -38px;
-            top: 30px;
-            width: 16px;
-            height: 16px;
-            background: #ff6b9d;
-            border-radius: 50%;
-            border: 4px solid #0a0512;
-            box-shadow: 0 0 25px rgba(255, 107, 157, 0.8);
-        }
-
-        .timeline-item h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            color: #ff6b9d;
-            margin-bottom: 12px;
-        }
-
-        .timeline-item p {
-            color: #ffc5d9;
-            line-height: 1.8;
-            font-size: 1rem;
-        }
-
-        /* Dreams Grid */
-        .dreams-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1100px;
-            margin: 60px auto;
-        }
-
-        .dream-card {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.08), rgba(196, 69, 105, 0.05));
-            border: 1px solid rgba(255, 107, 157, 0.25);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(15px);
-            text-align: center;
-            transition: all 0.4s ease;
-        }
-
-        .dream-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.3);
-        }
-
-        .dream-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-        }
-
-        .dream-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            color: #ff6b9d;
-            margin-bottom: 15px;
-        }
-
-        .dream-card p {
-            color: #ffc5d9;
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        /* Shayari */
         .shayari-container {
-            max-width: 750px;
-            margin: 60px auto;
+            max-width: 900px;
+            margin: 80px auto;
         }
 
         .shayari-card {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.08), rgba(196, 69, 105, 0.05));
-            border-left: 4px solid #ff6b9d;
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(15px);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.06));
+            border-left: 5px solid #ff6b9d;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 35px;
+            backdrop-filter: blur(20px);
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
-            line-height: 2.1;
+            font-size: 1.4rem;
+            line-height: 2.4;
             color: #ffc5d9;
             font-style: italic;
             text-align: center;
+            transition: all 0.5s ease;
         }
 
-        /* Love Section */
+        .shayari-card:hover {
+            transform: translateX(15px);
+        }
+
         .love-locked {
-            max-width: 650px;
-            margin: 120px auto;
+            max-width: 700px;
+            margin: 150px auto;
             text-align: center;
         }
 
         .lock-container {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.08), rgba(196, 69, 105, 0.05));
-            border: 1px solid rgba(255, 107, 157, 0.3);
-            border-radius: 25px;
-            padding: 60px 40px;
-            backdrop-filter: blur(20px);
+            animation: floatLock 5s ease-in-out infinite;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.12), rgba(196, 69, 105, 0.08));
+            border: 3px solid rgba(255, 107, 157, 0.4);
+            border-radius: 30px;
+            padding: 80px 50px;
+            backdrop-filter: blur(25px);
+        }
+
+        @keyframes floatLock {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
         }
 
         .lock-icon {
-            font-size: 5rem;
-            margin-bottom: 35px;
-            filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.6));
+            font-size: 6rem;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 0 40px rgba(255, 107, 157, 0.8));
         }
 
         .lock-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             background: linear-gradient(135deg, #ff6b9d, #ffa07a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: 900;
         }
 
         .lock-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #ffc5d9;
-            margin-bottom: 50px;
-            line-height: 2;
+            margin-bottom: 60px;
+            line-height: 2.2;
         }
 
         .unlock-input {
-            background: rgba(255, 107, 157, 0.12);
-            border: 2px solid #ff6b9d;
+            background: rgba(255, 107, 157, 0.15);
+            border: 3px solid #ff6b9d;
             color: #fff;
-            padding: 18px 40px;
-            font-size: 1.2rem;
+            padding: 20px 45px;
+            font-size: 1.3rem;
             text-align: center;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             width: 100%;
-            max-width: 400px;
-            border-radius: 12px;
+            max-width: 450px;
+            border-radius: 15px;
         }
 
         .unlock-input::placeholder {
@@ -393,13 +439,12 @@
 
         .unlock-input:focus {
             border-color: #ffa07a;
-            box-shadow: 0 0 40px rgba(255, 107, 157, 0.5);
+            box-shadow: 0 0 50px rgba(255, 107, 157, 0.6);
         }
 
-        /* Love Content */
         .love-content {
             display: none;
-            max-width: 750px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -413,13 +458,13 @@
 
         .love-page.active {
             display: block;
-            animation: loveFade 1s ease;
+            animation: loveReveal 1.2s ease;
         }
 
-        @keyframes loveFade {
+        @keyframes loveReveal {
             from { 
                 opacity: 0; 
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to { 
                 opacity: 1; 
@@ -428,55 +473,61 @@
         }
 
         .love-card {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.06));
-            border: 1px solid rgba(255, 107, 157, 0.3);
-            border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 35px;
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.12), rgba(196, 69, 105, 0.08));
+            border: 3px solid rgba(255, 107, 157, 0.4);
+            border-radius: 25px;
+            padding: 60px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(25px);
             text-align: center;
         }
 
         .love-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             background: linear-gradient(135deg, #ff6b9d, #ffa07a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-weight: 900;
         }
 
         .love-card p {
             color: #ffc5d9;
-            line-height: 2.3;
-            font-size: 1.1rem;
-            margin-bottom: 22px;
+            line-height: 2.5;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
             font-family: 'Cormorant Garamond', serif;
+        }
+
+        .hidden-name {
+            color: #ff6b9d;
+            font-weight: 700;
+            font-size: 1.3rem;
         }
 
         .love-nav {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-top: 50px;
+            gap: 30px;
+            margin-top: 60px;
         }
 
         .love-nav button {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(196, 69, 105, 0.1));
-            border: 2px solid #ff6b9d;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.15));
+            border: 3px solid #ff6b9d;
             color: #fff;
-            padding: 15px 40px;
-            font-size: 1rem;
-            letter-spacing: 2px;
+            padding: 18px 50px;
+            font-size: 1.05rem;
+            letter-spacing: 3px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 10px;
+            transition: all 0.4s ease;
+            border-radius: 12px;
         }
 
         .love-nav button:hover:not(:disabled) {
-            background: linear-gradient(135deg, rgba(255, 107, 157, 0.25), rgba(196, 69, 105, 0.15));
-            transform: translateY(-3px);
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(196, 69, 105, 0.2));
+            transform: translateY(-5px);
         }
 
         .love-nav button:disabled {
@@ -487,35 +538,33 @@
         .page-counter {
             text-align: center;
             color: #ffa07a;
-            font-size: 0.9rem;
-            margin-top: 20px;
-            letter-spacing: 2px;
+            font-size: 1rem;
+            margin-top: 25px;
+            letter-spacing: 3px;
         }
 
-        /* Float Button */
         .float-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
+            bottom: 35px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, #ff6b9d, #c44569);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 10px 35px rgba(255, 107, 157, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.6);
+            transition: all 0.4s ease;
             z-index: 999;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
         .float-btn:hover {
-            transform: scale(1.15) rotate(180deg);
+            transform: scale(1.2) rotate(180deg);
         }
 
-        /* Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -536,19 +585,19 @@
 
         .modal-content {
             background: linear-gradient(135deg, rgba(26, 10, 30, 0.95), rgba(45, 27, 61, 0.95));
-            border: 2px solid #ff6b9d;
-            padding: 50px;
-            border-radius: 20px;
-            max-width: 550px;
+            border: 3px solid #ff6b9d;
+            padding: 60px;
+            border-radius: 25px;
+            max-width: 600px;
             text-align: center;
             position: relative;
         }
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 2rem;
+            top: 25px;
+            right: 35px;
+            font-size: 2.5rem;
             cursor: pointer;
             color: #ffa07a;
             transition: all 0.3s ease;
@@ -561,34 +610,30 @@
 
         .modal h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, #ff6b9d, #ffa07a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-weight: 900;
         }
 
         .modal p {
             color: #ffc5d9;
-            line-height: 2;
-            font-size: 1.05rem;
+            line-height: 2.2;
+            font-size: 1.1rem;
         }
 
         @media (max-width: 768px) {
             .nav {
-                padding: 18px 20px;
+                padding: 20px 25px;
                 flex-direction: column;
-                gap: 15px;
+                gap: 18px;
             }
 
             .nav-menu {
-                gap: 15px;
-                font-size: 0.75rem;
-            }
-
-            .timeline {
-                padding-left: 40px;
+                gap: 18px;
+                font-size: 0.8rem;
             }
 
             .dreams-grid {
@@ -602,19 +647,18 @@
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <div class="bg-gradient"></div>
+    <div id="particlesContainer"></div>
 
-    <!-- Landing -->
     <div class="landing" id="landing">
-        <h1 class="landing-name">MOHD AFFAN</h1>
+        <h1 class="landing-name">AFFAN</h1>
         <p class="landing-tagline">Tumhe yahan aane ki zarurat thi.</p>
         <button class="enter-btn" id="enterBtn">DAAKHIL HO</button>
     </div>
 
-    <!-- Main -->
     <div class="main-container" id="mainContainer">
         <nav class="nav">
-            <div class="nav-logo">AFFAN</div>
+            <div class="nav-logo" onclick="location.reload()">AFFAN</div>
             <ul class="nav-menu">
                 <li data-page="about" class="active">ABOUT</li>
                 <li data-page="journey">JOURNEY</li>
@@ -624,384 +668,492 @@
             </ul>
         </nav>
 
-        <!-- About -->
         <div class="page active" id="page-about">
-            <h2 class="page-title">📖 Mere Bare Mein</h2>
+            <h2 class="page-title">📖 Thoda Alag, Thoda Zyada</h2>
             <div class="content-card">
-                <p>Welcome to my world!</p>
-                <p>Main ek dreamer hoon jo apni life ko apne hisaab se jeena pasand karta hai.</p>
-                <p>IT Support mein kaam karta hoon aur BCA kar raha hoon.</p>
-                <p>East Delhi se hoon. Introvert hoon.</p>
-                <p>Loyal hoon. Observant hoon. Overthinker hoon.</p>
+                <p><strong>Mohd Affan Chaudhary</strong></p>
+                <p>Main Haryana se hoon, par qismat mujhe yahan le aayi jahan main aaj hoon. Abhi main GD Goenka University se Pharmacy pursue kar raha hoon.</p>
+                <p>Zindagi ko main ek subject ki tarah nahi, ek experience ki tarah padhta hoon - jisme har din kuch naya seekhne ko milta hai.</p>
+                <p>Main apni life ko lightly nahi leta, par seriously enjoy zaroor karta hoon. Har pal ko jeena, usme thoda sa fun, thodi si shayari aur thoda sa khud ka rang milana - bas yahi mera style hai.</p>
+            </div>
+            <div class="content-card">
+                <p>Main baaki logon ki tarah bilkul bhi nahi hoon - aur honestly, mujhe aisa rehna bahut pasand hai. Main crowd ka hissa banna nahi chahta, main apni hi duniya ka resident hoon.</p>
+                <p>Main zyada der upset reh hi nahi pata. Dil halka rakhta hoon, baatein gehri hoti hain par chehra aksar hasta hua hota hai. Shayad isi liye jo mujhe theek se jaante hain, wo kehte hain: "Tu bore ho hi nahi sakta."</p>
+                <p>Aur meri family? 💛 Sach bataun to meri family bhi boring nahi hai. Maine dekha hai kai gharon mein log saath hoke bhi bore rehte hain, par hamare yahan hansi apne aap chalti rehti hai. Mere ghar ke pal, aksar yaadon mein muskurate hue milte hain.</p>
             </div>
         </div>
 
-        <!-- Journey -->
         <div class="page" id="page-journey">
-            <h2 class="page-title">🌙 Meri Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h3>Bachpan</h3>
-                    <p>Wo befikri, wo masti. Dreams dekhna tab se shuru ho gaya.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Learning</h3>
-                    <p>Seekh raha hoon, gir raha hoon, khada ho raha hoon.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Struggle</h3>
-                    <p>Khud ko dhundhna. Real strength silence mein hoti hai.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Discovery</h3>
-                    <p>Emotional hoon, romantic hoon, loyal hoon.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3>Future</h3>
-                    <p>Aasman ko chhuna hai. Stay tuned!</p>
-                </div>
+            <h2 class="page-title">🌙 Bachpan Se Aaj Tak</h2>
+            <div class="content-card">
+                <p>Bachpan simple tha, par khushiyon se bhara hua. Chhoti chhoti baaton mein excitement, aur bina wajah hans dena - shayad wahi aadat aaj tak saath hai.</p>
+                <p>Waqt ke saath samajh aayi responsibilities, career ka pressure, aur future ke sawaal. Par ek baat kabhi nahi badli - life ko enjoy karne ka junoon.</p>
+                <p>Main maanta hoon zindagi perfect nahi hoti, par agar tum usse pyaar karna seekh lo na, to wo tumhare liye perfect ban jaati hai.</p>
             </div>
         </div>
 
-        <!-- Dreams -->
         <div class="page" id="page-dreams">
             <h2 class="page-title">✨ Mere Sapne</h2>
             <div class="dreams-grid">
-                <div class="dream-card">
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
                     <div class="dream-icon">☕</div>
-                    <h3>Midnight Coffee</h3>
-                    <p>Raat ke 2 baje, coffee aur thoughts.</p>
+                    <h3>Late Night Coffee</h3>
+                    <p>Raat ke 2 baje, jab duniya so rahi hoti hai aur thoughts jaag rahe hote hain.</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Ek cup coffee, aur khayalon ka shor. Silence mein sab kuch mil jata hai. Yahi mera waqt hai.</p>
+                    </div>
                 </div>
-                <div class="dream-card">
-                    <div class="dream-icon">💻</div>
-                    <h3>Tech Dreams</h3>
-                    <p>Startup banana hai. Technology se duniya badalni hai.</p>
+
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
+                    <div class="dream-icon">🪁</div>
+                    <h3>Kite Flying</h3>
+                    <p>Aasman mein patang aur haath mein uski dor.</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Azaadi ka ehsaas. Bulandi ka junoon. Yahi zindagi hai.</p>
+                    </div>
                 </div>
-                <div class="dream-card">
-                    <div class="dream-icon">🌃</div>
-                    <h3>Night Drives</h3>
-                    <p>Khaali roads, cold breeze. Freedom.</p>
+
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
+                    <div class="dream-icon">🍽️</div>
+                    <h3>Aanu Ke Paranthe</h3>
+                    <p>Special mention 🫶</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Ghar ka pyaar, taste mein nahi, banane wale mein hota hai. Aanu ke haath ka khaana - priceless.</p>
+                    </div>
                 </div>
-                <div class="dream-card">
-                    <div class="dream-icon">📚</div>
-                    <h3>Reading</h3>
-                    <p>Books aur shayari mein kho jana.</p>
-                </div>
-                <div class="dream-card">
+
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
                     <div class="dream-icon">🎵</div>
-                    <h3>Music</h3>
-                    <p>Arijit, lofi beats. Music therapy.</p>
+                    <h3>Shaam Ki Music</h3>
+                    <p>Shant music aur doobte suraj ke saath.</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Kuch pal bas apne liye. Kuch gaane bas dil ke liye. Yeh sukoon hai jo shabd mein nahi samjha ja sakta.</p>
+                    </div>
                 </div>
-                <div class="dream-card">
+
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
+                    <div class="dream-icon">🗼</div>
+                    <h3>Eiffel Tower</h3>
+                    <p>Sapna hai ek din yahan jaane ka.</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Uske saath. Haath mein haath. Paris ki raatein. City of Love. Wo sapna jo dil mein hai, ek din zaroor pura hoga.</p>
+                    </div>
+                </div>
+
+                <div class="dream-card" onclick="this.classList.toggle('expanded')">
                     <div class="dream-icon">🌌</div>
-                    <h3>Stargazing</h3>
-                    <p>Universe ke saamne sab chota hai.</p>
+                    <h3>Peaceful Life</h3>
+                    <p>Sukoon bhara kal.</p>
+                    <div class="dream-expanded">
+                        <p style="color: #ffa07a;">Apni family ko hamesha muskurate hue dekhna. Raat ki coffee ke saath apne khayalon ko likhna. Aur zindagi ke end tak ye keh pana: "Haan, maine dil se jee li."</p>
+                    </div>
                 </div>
+            </div>
+
+            <div class="content-card">
+                <p><strong>Mujhe Kya Nahi Pasand:</strong></p>
+                <p>Fake log - jo apni asli personality chhupa ke rakhte hain ❌</p>
+                <p>Zabardasti ka show-off - wo zindagi jo sirf dusron ko impress karne ke liye ji jaaye ❌</p>
+                <p>Aur haan... 🍆 Baingan bilkul nahi pasand - ispe koi discussion nahi 😌</p>
+                <p>Mujhe seedha rehna pasand hai. Jo hoon, wahi hoon.</p>
             </div>
         </div>
 
-        <!-- Thoughts -->
         <div class="page" id="page-thoughts">
             <h2 class="page-title">💭 Jo Kabhi Nahi Kaha</h2>
             <div class="shayari-container">
                 <div class="shayari-card">
-                    "Main thanda nahi hoon, bas emotions ko protect kar raha hoon."
+                    "Main bilkul seedha hoon. Jo hoon, wahi hoon. Fake persona mera style nahi hai."
                 </div>
                 <div class="shayari-card">
-                    "Har khamoshi mein ek kahani hai."
+                    "Main zyada der upset reh hi nahi pata. Dil halka rakhta hoon, baatein gehri hoti hain."
                 </div>
                 <div class="shayari-card">
-                    "Akele hone se dar nahi, akela feel hone se dar hai."
+                    "Hansi-mazaak, bina matlab ke - yahi to zindagi hai. Har choti si baat mein khushi dhundhna seekh liya hai."
                 </div>
                 <div class="shayari-card">
-                    "Overthink isliye kyunki zyada care karta hoon."
-                </div>
-                <div class="shayari-card">
-                    "Ek baar dil mein basa liya, toh bhoolna mumkin nahi."
+                    "Zindagi perfect nahi hoti. Par agar tum usse pyaar karna seekh lo, to wo tumhare liye perfect ban jaati hai."
                 </div>
             </div>
         </div>
 
-        <!-- Love -->
         <div class="page" id="page-love">
-            <h2 class="page-title">❤️ Dil Ki Baat</h2>
+            <h2 class="page-title">❤️ Love Journey</h2>
             
             <div class="love-locked" id="loveLocked">
                 <div class="lock-container">
                     <div class="lock-icon">🔒</div>
-                    <h3 class="lock-title">Yeh Meri Love Life Hai</h3>
-                    <p class="lock-subtitle">Waise toh isme mere alawa koi entry hi nahi le payega.<br>Fir bhi main bana hi raha hoon.<br><br>Agar tum wo ho, toh naam likho.</p>
-                    <input type="text" class="unlock-input" id="loveUnlock" placeholder="Wo naam...">
+                    <h3 class="lock-title">A Secret Space</h3>
+                    <p class="lock-subtitle">This is my love story.<br>Only one word unlocks it.<br><br>If you know the password, enter below.</p>
+                    <input type="text" class="unlock-input" id="loveUnlock" placeholder="The key...">
                 </div>
             </div>
 
-            <div class="love-content" id="loveContent">
-                <!-- Page 1 -->
+            <!-- ILMA's Love Content -->
+            <div class="love-content" id="ilmaContent">
                 <div class="love-page active">
                     <div class="love-card">
-                        <h3>Pehli Mulaqat</h3>
-                        <p>Ilma.</p>
-                        <p>Ye naam sunte hi sab kuch badal gaya.</p>
-                        <p>Do mahine. Sirf do mahine.</p>
-                        <p>Par un do mahino mein jitna jeena seekha, utna puri zindagi mein nahi seekha.</p>
+                        <h3>Pehli Mohabbat</h3>
+                        <p><span class="hidden-name">I</span>t wasn't planned. Kabhi socha nahi tha ki pyaar itna real ho sakta hai.</p>
+                        <p>Main chull mein relationship mein aaya. Bas timepass ke liye. Par tumne mujhe seriously le liya, aur main bhi tumhe seriously lene laga.</p>
+                        <p>Efforts kiye maine. Dil se. Aur tumne bhi jawab diya. Aur ek din, hum relationship mein aa gaye. Officially.</p>
+                        <p>Wo kahani zyada lambi nahi thi... sirf 2 mahine se bhi kam. Par khoobsurti length mein nahi hoti, ehsaas mein hoti hai. Aur wo ehsaas... abhi tak zinda hai.</p>
                     </div>
                 </div>
 
-                <!-- Page 2 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Wo Ehsaas</h3>
-                        <p>Uski aankhon mein dekha toh apna aasra dekha.</p>
-                        <p>Uski baaton mein suna toh apna ghar mila.</p>
-                        <p>Pehli baar laga ki main ghar aa gaya hoon.</p>
-                        <p>Har lamha ek khubsurat khwaab tha.</p>
+                        <h3>Pehle Bakwaas Lagta Tha</h3>
+                        <p><span class="hidden-name">L</span>ove wasn't something I believed in. Sach kahun, mujhe ye sab bakwaas lagta tha.</p>
+                        <p>"Uski aankhon se pyaar hai" - main sochta tha yeh sirf filmon mein hota hai. "Use dekhe bina mann nahi lagta" - aise logon ka main mazaak bhi banata tha.</p>
+                        <p>Aur phir... Zindagi ne mujhe hi wo lesson padha diya. Jab tumhe dekha, samajh aa gaya ki wo sab sach tha.</p>
+                        <p>Tumhari aankhein. Tumhari muskurahat. Tumhari har baat. Sab kuch itna real tha ki main khud ko rok nahi paya. Girta chala gaya. Deep. Bahut deep.</p>
                     </div>
                 </div>
 
-                <!-- Page 3 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Late Night Calls</h3>
-                        <p>Raat ke 2 baje phone pe baatein.</p>
-                        <p>Khatam hi nahi hoti thi.</p>
-                        <p>Uski awaaz sunke lagta tha sab theek hai.</p>
-                        <p>Wo pal, wo hansna, wo chup reh jana.</p>
+                        <h3>Wo Achanak Aayi</h3>
+                        <p><span class="hidden-name">M</span>y world changed completely. Tumse pehle aur tumse baad - do alag duniya.</p>
+                        <p>Sach kahun, mujhe aaj bhi lagta hai aisa relationship shayad kisi ka nahi hoga. Jo humne share kiya, wo khaas tha. Bahut khaas.</p>
+                        <p>Late night calls jo kabhi khatam hi nahi hoti thi. Coffee dates jahan sirf tum aur main the, duniya gaayab ho jaati thi. Wo smile jo dekh ke dil bhar aata tha.</p>
+                        <p>Tumhari aankhein... Hayee... Astaghfirullah 😭 Usi mein kho jaana, usi mein jeena - yahi to pyaar tha. Tumhare saath har lamha ek khubsurat khwaab jaisa tha.</p>
                     </div>
                 </div>
 
-                <!-- Page 4 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Coffee Dates</h3>
-                        <p>Sirf coffee nahi, do dilon ka milna tha.</p>
-                        <p>Uske saath baith ke lagta tha waqt ruk gaya hai.</p>
-                        <p>Har date ek naya ehsaas.</p>
-                        <p>Main khud ko bhool jata tha bas use dekhta tha.</p>
+                        <h3>End Jo Aana Hi Tha</h3>
+                        <p><span class="hidden-name">A</span>ll good things come to an end, they say. Aur hamare saath bhi wahi hua.</p>
+                        <p>Tumne breakup kar liya. Aur kisi aur ke relationship mein chali gayi. Jaldi mein. Bahut jaldi mein.</p>
+                        <p>Theek hai. Sabki apni pasand hoti hai. Main tumhe khush dekhna chahta hoon. Hamesha.</p>
+                        <p>Bas... ek baat thi jo galat lagi. Cheat karke jaana. Wo dard alag tha. Par main samajh gaya - shayad main kaafi nahi tha. Shayad tum better deserve karti thi.</p>
                     </div>
                 </div>
 
-                <!-- Page 5 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Wo Smile</h3>
-                        <p>Jab wo muskurati thi.</p>
-                        <p>Lagta tha duniya ki sab khushiyan usi mein hain.</p>
-                        <p>Us smile ke liye kuch bhi kar sakta tha.</p>
-                        <p>Aaj bhi yaad aati hai wo smile.</p>
+                        <h3>Uske Baad</h3>
+                        <p>Uske baad se zindagi badal gayi. Trust issues ho gaye. Mujhe kisi ladki par bharosa hi nahi hua.</p>
+                        <p>Friends bahut hain. Acche hain. Close bhi hain. Par relationship? Bas ek hi thi. Tumhare saath. Chhoti si. Par dil tak gayi.</p>
+                        <p>Maine koshish ki move on karne ki. Logo se mile. Baat ki. Par koi bhi tumhari jagah nahi le sakaa.</p>
+                        <p>Kyunki tum tum ho. Unique. Special. Aur koi tumhari tarah nahi ho sakta. Shayad isliye main abhi bhi atka hua hoon.</p>
                     </div>
                 </div>
 
-                <!-- Page 6 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Messages</h3>
-                        <p>Har subah uska message.</p>
-                        <p>Din ki shuruat usi se hoti thi.</p>
-                        <p>Raat ko bhi uske bina neend nahi aati thi.</p>
-                        <p>Ab wo messages nahi aate.</p>
+                        <h3>Aankhon Ka Sach</h3>
+                        <p>Ab samajh aata hai aankhon se pyaar kya hota hai. Tumne mujhe wo ehsaas diya jo kabhi nahi bhulta.</p>
+                        <p>Sach hai - Jise tum pasand karte ho, uski har cheez se pyaar ho jaata hai. Uski aawaaz, uski hansi, uski choti choti aaadatein - sab kuch.</p>
+                        <p>Main is trap mein fas gaya. Tumhare trap mein. Aur aaj tak nikal nahi paya. Shayad nikalna bhi nahi chahta.</p>
+                        <p>Kyunki tumhare saath bitaye wo pal, wo memories - wo sab itne qeemti hain ki main unhe chodna nahi chahta. Chahe dard ho, chahe sukoon - wo sab tumhare hain.</p>
                     </div>
                 </div>
 
-                <!-- Page 7 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Jab Toot Gaya</h3>
-                        <p>Usne kaha - "It's over."</p>
-                        <p>Breakup.</p>
-                        <p>Main nahi toda. Main abhi bhi wahi hoon.</p>
-                        <p>Wo chali gayi, par yaadein nahi gayi.</p>
+                        <h3>Kami</h3>
+                        <p>Jaise paani ki kami sharab poori nahi kar sakti, waise hi tumhari kami koi aur poori nahi kar sakta.</p>
+                        <p>Options ki kami nahi hai. Log kehte hain - "Aage badh, move on kar, bahut log hain duniya mein." Par bhai... tumhari aankhen.</p>
+                        <p>Tumhare saath jo connection tha, wo dobara kisi ke saath nahi ban sakta. Main jaanta hoon. Try kiya hai maine. Par har baar fail hua.</p>
+                        <p>Tumhari yaad aati hai. Raat ko. Din mein. Har waqt. Coffee peete hue tumhara khyal. Gaane sunte hue tumhari awaaz. Sab jagah tum ho. Har jagah.</p>
                     </div>
                 </div>
 
-                <!-- Page 8 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Aaj Bhi</h3>
-                        <p>Main use abhi bhi utna hi pyaar karta hoon.</p>
-                        <p>Shayad wo nahi karti.</p>
-                        <p>Par mere dil mein uski jagah wahi hai.</p>
-                        <p>Kuch ehsaas waqt se nahi badalte.</p>
+                        <h3>Khamosh Mohabbat</h3>
+                        <p>Aaj bhi main tumse utna hi pyaar karta hoon. Ye jaante hue bhi ke tum kisi aur ke saath ho. Ke tum kisi aur ko pasand karti ho.</p>
+                        <p>Bewakoofi hai. Main jaanta hoon. Par dil ka sach bhi hai. Dil wo nahi suunta jo dimaag kehta hai.</p>
+                        <p>Maine kabhi tumhe pareshan nahi kiya breakup ke baad. Aur na kabhi karunga. Tumhari respect kaafi hai mere liye. Tumhari khushi kaafi hai.</p>
+                        <p>Bas door se dekhta rehta hoon. Social media pe scroll karte hue, kahin tumhari photo mil jaaye. Wo bhi bahut hai mere liye.</p>
                     </div>
                 </div>
 
-                <!-- Page 9 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Ek Taraffa Mohabbat</h3>
-                        <p>Ek taraffa mohabbat ki apni baat hoti hai.</p>
-                        <p>Jahan koi saath nahi hota, sirf ehsaas hota hai.</p>
-                        <p>Main use khone ke baad bhi nahi khona chahta.</p>
-                        <p>Yeh junoon hai ya paagalpan, pata nahi.</p>
+                        <h3>Uski Khushi</h3>
+                        <p>Tumhari khushi mein hi meri khushi hai. Ye dialogue nahi, hakeeqat hai. Main tumhe kabhi pareshan nahi karna chahta.</p>
+                        <p>Agar tum kisi aur ke saath khush ho, to main bhi khush hoon. Dard hota hai, par accept kar liya hai maine.</p>
+                        <p>Bas itna chahta hoon ki tum hamesha muskurati raho. Chahe main tumhari zindagi mein na bhi rahun, par tumhare chehre pe wo smile hamesha rahe.</p>
+                        <p>Khamosh mohabbat. Ek taraffa ehsaas. Par saccha. Bilkul saccha. Aur shayad yahi sabse bada pyaar hai - jahan kuch mangna nahi, bas dena hota hai.</p>
                     </div>
                 </div>
 
-                <!-- Page 10 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Raaton Ki Tanhai</h3>
-                        <p>Raat ko jab sab so jate hain.</p>
-                        <p>Tab uski yaadein aati hain.</p>
-                        <p>Coffee peete hue uske saath ki yaadein.</p>
-                        <p>Wo raatein ab nahi hai, par ehsaas abhi bhi hai.</p>
+                        <h3>Aakhri Ehsaas</h3>
+                        <p>Mujhe pata hai tum shayad kabhi mujhe dekhna bhi pasand na karo. Shayad mera naam sunke bhi uncomfortable feel ho.</p>
+                        <p>Par phir bhi... main tumse pyaar karta hoon. Beinteha. Beintehaan. Jo shabd mein nahi samjhaya ja sakta.</p>
+                        <p>Kaash tum aao... ek baar. Aur sirf itna bolo: "Affan, main samajh gayi. Main jaanti hoon tum kitna pyaar karte the."</p>
+                        <p>Bas. Itna kaafi hai. Phir main chain se jee sakta hoon. Phir mera dil sukoon se reh sakta hai.</p>
                     </div>
                 </div>
 
-                <!-- Page 11 -->
                 <div class="love-page">
                     <div class="love-card">
-                        <h3>Har Gaane Mein</h3>
-                        <p>Har romantic gaana uski yaad dilata hai.</p>
-                        <p>Arijit ke gaane sun ke wo chehra yaad aata hai.</p>
-                        <p>Music therapy ab pain therapy ban gayi hai.</p>
-                        <p>Par fir bhi sunna band nahi karta.</p>
-                    </div>
-                </div>
-
-                <!-- Page 12 -->
-                <div class="love-page">
-                    <div class="love-card">
-                        <h3>Khamoshi</h3>
-                        <p>Logo se nahi keh sakta.</p>
-                        <p>Yeh dard andar hi rakhta hoon.</p>
-                        <p>Muskurate hain chehre pe, toote hain dil se.</p>
-                        <p>Khamoshi mein hi sab kuch keh deta hoon.</p>
-                    </div>
-                </div>
-
-                <!-- Page 13 -->
-                <div class="love-page">
-                    <div class="love-card">
-                        <h3>Ab Kaun Hai</h3>
-                        <p>Ilma ke baad socha tha koi nahi hogi.</p>
-                        <p>Par zindagi ne ek aur mod dikha diya.</p>
-                        <p>Ab kisi aur ko pasand karta hoon.</p>
-                        <p>Par loyalty abhi bhi Ilma ke liye hai.</p>
-                    </div>
-                </div>
-
-                <!-- Page 14 -->
-                <div class="love-page">
-                    <div class="love-card">
-                        <h3>Dil Ki Sacchai</h3>
-                        <p>Main ek aurat ka insaan hoon.</p>
-                        <p>Jise chahta hoon, sirf use chahta hoon.</p>
-                        <p>Ye naya chapter hai, naya ehsaas hai.</p>
-                        <p>Par purana pyaar bhulaya nahi ja sakta.</p>
-                    </div>
-                </div>
-
-                <!-- Page 15 -->
-                <div class="love-page">
-                    <div class="love-card">
-                        <h3>Agar Wo Padh Rahi Hai</h3>
-                        <p>Ilma, agar tum yeh padh rahi ho...</p>
-                        <p>Main abhi bhi wahi hoon.</p>
-                        <p>Thoda badla hoon, thoda toot gaya hoon.</p>
-                        <p>Par dil mein tumhari jagah wahi hai.</p>
-                    </div>
-                </div>
-
-                <!-- Page 16 -->
-                <div class="love-page">
-                    <div class="love-card">
-                        <h3>Akhri Baat</h3>
-                        <p>Move on kar raha hoon, par bhool nahi raha.</p>
-                        <p>Kisi aur ko pasand kar raha hoon, par tumhe replace nahi kar raha.</p>
-                        <p>Tum tum ho. Wo wo hai.</p>
-                        <p>Darwaza band nahi hai. Kabhi lautna ho toh...</p>
+                        <h3>If You're Reading This</h3>
+                        <p>Waise to tumhare farishte bhi yahan tak nahi aa payenge. Yeh password sirf mujhe pata hai.</p>
+                        <p>Per fir bhi agar tum yeh padh rahi ho (jo ki koi aur nahi samajh sakta), to mujhe maaf karna.</p>
+                        <p>Mera aim tumhe pareshan karna bilkul bhi nahi hai. Aur maine tumhe kabhi physical ya virtually kuch galat kaha ho, toh dil se maafi chahta hoon.</p>
+                        <p>Bas... main chahta hoon ki tum khush raho. Hamesha. Chahe mere saath ho ya na ho. Tumhari khushi hi meri khushi hai. Hamesha rahegi.</p>
+                        <p>Take care. Aur haan... kabhi zaroorat pade kisi cheez ki, to yaad rakhna - main hoon. Hamesha rahunga. 🤍</p>
                     </div>
                 </div>
 
                 <div class="love-nav">
-                    <button id="lovePrev">⬅️ PEECHE</button>
-                    <button id="loveNext">AAGE ➡️</button>
+                    <button id="ilmaPrev">⬅️ PEECHE</button>
+                    <button id="ilmaNext">AAGE ➡️</button>
                 </div>
-                <div class="page-counter" id="pageCounter">1 / 16</div>
+                <div class="page-counter" id="ilmaCounter">1 / 11</div>
+            </div>
+
+            <!-- ALFA's Love Content -->
+            <div class="love-content" id="alfaContent">
+                <div class="love-page active">
+                    <div class="love-card">
+                        <h3>Ek Naya Ehsaas</h3>
+                        <p><span class="hidden-name">A</span> new chapter began. Tumhare saath. Unexpected. Unplanned. Par beautiful.</p>
+                        <p>Pehle socha tha ke ab kisi ko pasand nahi karunga. Ilma ke baad sab kuch khatam ho gaya tha. Trust issues the. Dil toota hua tha.</p>
+                        <p>Par phir tum aayi. Achanak. Bina kisi warning ke. Aur sab kuch phir se shuru ho gaya.</p>
+                        <p>Tumhe dekhkar laga ki shayad pyaar dobara ho sakta hai. Shayad dil phir se dhadak sakta hai. Shayad main phir se jee sakta hoon.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Farak Tha</h3>
+                        <p><span class="hidden-name">L</span>ove this time was different. Pehli baar jaise confusion tha, is baar clarity hai.</p>
+                        <p>Ilma ke saath jo tha wo passionate tha, intense tha. Tumhare saath jo hai wo comfortable hai, peaceful hai.</p>
+                        <p>Dono alag hain. Dono special hain apne tareeke se. Par main chahta hoon tum jaano - tum bhi utni hi important ho mere liye.</p>
+                        <p>Tumhe kisi se compare nahi kar raha. Tum unique ho. Apne aap mein complete ho. Aur main tumhare saath hona chahta hoon.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Tumhari Aankhein</h3>
+                        <p><span class="hidden-name">F</span>or the first time in a long time, I felt alive again. Tumhari wajah se.</p>
+                        <p>Tumhari aankhein bhi waise hi hain jaise Ilma ki thi - deep, expressive, honest. Par tumhare tareeqe se alag.</p>
+                        <p>Jab tum dekhti ho mujhe, lagta hai jaise tum sach mein dekh rahi ho. Not just my face, but my soul.</p>
+                        <p>Aur wo smile. Oh God, wo smile. Tumhari hansi sunke dil ko sukoon milta hai. Tumhare saath time bitake sab dard bhool jata hoon.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Abhi Bhi Dar Hai</h3>
+                        <p><span class="hidden-name">A</span>gain trusting someone is not easy. Pehle jo hua uska dar abhi bhi hai.</p>
+                        <p>Agar tum bhi chali gayi to? Agar tumne bhi dil toda to? Agar main phir se akela reh gaya to?</p>
+                        <p>Par phir sochta hoon - pyaar mein dar hoga to pyaar kaise karenge? Risk lena hi padega. Trust karna hi padega.</p>
+                        <p>Aur tumne mujhe wo bharosa diya hai. Tumhare actions se, tumhare words se lagta hai ki tum different ho. Tumhare saath safe feel hota hai.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Main Ek Aurat Ka Aadmi Hoon</h3>
+                        <p>Main chahta hoon tum ye samjho - main ek aurat ka insaan hoon. Jise pyaar karta hoon, sirf use pyaar karta hoon.</p>
+                        <p>Ilma ka chapter khatam ho gaya. Past hai wo. Par tum present ho. Aur hopefully, future bhi.</p>
+                        <p>Main tumhe wo commitment de sakta hoon jo sirf real love mein milti hai. Loyalty. Trust. Respect. Sab kuch.</p>
+                        <p>Options ki kami nahi hai duniya mein. Par main tumhe choose kiya hai. Consciously. Deliberately. Kyunki tum special ho.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Tumhare Saath Dreams</h3>
+                        <p>Tumhare saath bahut kuch karna chahta hoon. Late night drives. Coffee dates. Long talks about everything and nothing.</p>
+                        <p>Eiffel Tower jana chahta hoon tumhare saath. Paris ki streets pe walk karna. City of Love mein tumhara haath pakad ke ghoomna.</p>
+                        <p>Wo sunset dekhna chahta hoon tumhare saath jahan sirf hum dono hon. Wo raat guzaarni hai jahan bas tum aur main, aur humari baatein.</p>
+                        <p>Choti choti khushiyan. Simple moments. Par tumhare saath wo sab special ban jaate hain. Magical ban jaate hain.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Jo Main Mehsoos Karta Hoon</h3>
+                        <p>Tumhare saath jo connection hai, wo explain karna mushkil hai. Words mein nahi aa sakta.</p>
+                        <p>Jab tum paas hoti ho, lagta hai sab theek hai. Jab door hoti ho, tumhari yaad aati hai. Constantly.</p>
+                        <p>Tumhari awaaz sunne ko mann karta hai. Tumhe dekhne ko mann karta hai. Tumhare saath time bitane ko mann karta hai.</p>
+                        <p>Yeh pyaar hai ya attachment, main jaanta nahi. Par jo bhi hai, yeh real hai. Tumhare liye jo feel karta hoon, wo genuine hai.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Main Tumhe Kabhi Hurt Nahi Karunga</h3>
+                        <p>Ek promise karta hoon tumse - main tumhe kabhi hurt nahi karunga. Intentionally toh bilkul nahi.</p>
+                        <p>Tumhari respect karunga. Tumhare decisions ko respect karunga. Tumhari boundaries ko respect karunga.</p>
+                        <p>Jo Ilma ke saath mistake hui, wo tumhare saath nahi hogi. Maine sab sikh liya hai. Mature ho gaya hoon.</p>
+                        <p>Tumhe wo love dunga jo deserve karti ho. Wo care dunga jo chahiye. Tumhe priority dunga. Hamesha.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Tumhare Liye</h3>
+                        <p>Agar tum kuch bhi chahogi, main wo karne ki koshish karunga. Tumhari khushi mere liye important hai.</p>
+                        <p>Tumhare sapne poore karne mein help karunga. Tumhare goals support karunga. Tumhare struggles mein saath dunga.</p>
+                        <p>Main sirf boyfriend nahi, tumhara best friend bhi banna chahta hoon. Wo insaan jisse tum kuch bhi share kar sako.</p>
+                        <p>Tumhare liye main better banna chahta hoon. Ek better person. Ek better partner. Tumhare layak banna chahta hoon.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>Mera Sach</h3>
+                        <p>Main tumse pyaar karta hoon. Ho sakta hai abhi tumhe realize na ho, par main karta hoon.</p>
+                        <p>Tumhare bina ab sab adhoora lagta hai. Tumhare saath sab complete lagta hai.</p>
+                        <p>Main tumhe khona nahi chahta. Kabhi nahi. Tum mere liye bahut special ho.</p>
+                        <p>Bas itna chahta hoon - ek chance. Ek mauka. Prove karne ka ki main tumhare liye sahi hoon.</p>
+                    </div>
+                </div>
+
+                <div class="love-page">
+                    <div class="love-card">
+                        <h3>If You're Reading This</h3>
+                        <p>Agar tum yeh padh rahi ho, to iska matlab tum jaan gayi password. Iska matlab tum special ho.</p>
+                        <p>Main chahta hoon tum jaano - yeh website sirf tumhare liye hai. Har word, har line - tumhare liye likhi hai.</p>
+                        <p>Mujhe maaf karna agar main kabhi tumhe hurt kiya ho. Physical ya virtually. Intentionally ya unintentionally.</p>
+                        <p>Bas itna yaad rakhna - main tumhare saath hoon. Hamesha rahunga. Tum mere liye bahut important ho.</p>
+                        <p>Take care of yourself. Aur haan... agar kabhi zaroorat pade, main hoon. Just one call away. 🤍</p>
+                    </div>
+                </div>
+
+                <div class="love-nav">
+                    <button id="alfaPrev">⬅️ PEECHE</button>
+                    <button id="alfaNext">AAGE ➡️</button>
+                </div>
+                <div class="page-counter" id="alfaCounter">1 / 11</div>
             </div>
         </div>
     </div>
 
-    <!-- Float Button -->
     <div class="float-btn" id="floatBtn">💫</div>
 
-    <!-- Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">×</span>
-            <h3>Tumne Dhund Liya</h3>
-            <p>Kuch baatein chhupani padti hain.</p>
-            <p style="margin-top: 25px; font-style: italic; color: #ff6b9d;">"Zindagi mein kuch cheezein random nahi hoti. Tum yahan ho, matlab tumhe yahan hona tha."</p>
+            <h3>You Found It</h3>
+            <p>Kuch raaz chhupane padte hain.</p>
+            <p style="margin-top: 25px; font-style: italic; color: #ff6b9d;">"Tum yahan ho, matlab tumhe yahan hona tha."</p>
         </div>
     </div>
 
     <script>
-        // Enter Button
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 25 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ENTER BUTTON - MAIN FIX
         document.getElementById('enterBtn').addEventListener('click', function() {
             document.getElementById('landing').style.display = 'none';
             document.getElementById('mainContainer').classList.add('active');
         });
 
-        // Navigation
         const navItems = document.querySelectorAll('.nav-menu li');
         const pages = document.querySelectorAll('.page');
 
         navItems.forEach(item => {
             item.addEventListener('click', function() {
                 const pageId = this.getAttribute('data-page');
-                
                 navItems.forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
-                
                 pages.forEach(page => page.classList.remove('active'));
                 document.getElementById('page-' + pageId).classList.add('active');
-                
-                window.scrollTo(0, 0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
-        // Love Unlock
+        // LOVE UNLOCK - TWO PASSWORDS
         const loveUnlock = document.getElementById('loveUnlock');
         const loveLocked = document.getElementById('loveLocked');
-        const loveContent = document.getElementById('loveContent');
+        const ilmaContent = document.getElementById('ilmaContent');
+        const alfaContent = document.getElementById('alfaContent');
 
         loveUnlock.addEventListener('input', function() {
-            if (this.value.toLowerCase().trim() === 'ilma') {
+            const input = this.value.toLowerCase().trim();
+            if (input === 'ilmaaffaan') {
                 loveLocked.style.display = 'none';
-                loveContent.classList.add('unlocked');
+                ilmaContent.classList.add('unlocked');
+                alfaContent.classList.remove('unlocked');
+            } else if (input === 'alfaaffaan') {
+                loveLocked.style.display = 'none';
+                alfaContent.classList.add('unlocked');
+                ilmaContent.classList.remove('unlocked');
             }
         });
 
-        // Love Pages Navigation
-        let currentLovePage = 1;
-        const totalLovePages = 16;
-        const lovePages = document.querySelectorAll('.love-page');
-        const lovePrevBtn = document.getElementById('lovePrev');
-        const loveNextBtn = document.getElementById('loveNext');
-        const pageCounter = document.getElementById('pageCounter');
+        // ILMA Love Pages Navigation
+        let currentIlmaPage = 1;
+        const totalIlmaPages = 11;
+        const ilmaPages = document.querySelectorAll('#ilmaContent .love-page');
+        const ilmaPrevBtn = document.getElementById('ilmaPrev');
+        const ilmaNextBtn = document.getElementById('ilmaNext');
+        const ilmaCounter = document.getElementById('ilmaCounter');
 
-        function updateLovePage() {
-            lovePages.forEach(page => page.classList.remove('active'));
-            lovePages[currentLovePage - 1].classList.add('active');
-            
-            lovePrevBtn.disabled = currentLovePage === 1;
-            loveNextBtn.disabled = currentLovePage === totalLovePages;
-            
-            pageCounter.textContent = `${currentLovePage} / ${totalLovePages}`;
-            
-            window.scrollTo(0, 0);
+        function updateIlmaPage() {
+            ilmaPages.forEach(page => page.classList.remove('active'));
+            ilmaPages[currentIlmaPage - 1].classList.add('active');
+            ilmaPrevBtn.disabled = currentIlmaPage === 1;
+            ilmaNextBtn.disabled = currentIlmaPage === totalIlmaPages;
+            ilmaCounter.textContent = `${currentIlmaPage} / ${totalIlmaPages}`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        lovePrevBtn.addEventListener('click', function() {
-            if (currentLovePage > 1) {
-                currentLovePage--;
-                updateLovePage();
+        ilmaPrevBtn.addEventListener('click', function() {
+            if (currentIlmaPage > 1) {
+                currentIlmaPage--;
+                updateIlmaPage();
             }
         });
 
-        loveNextBtn.addEventListener('click', function() {
-            if (currentLovePage < totalLovePages) {
-                currentLovePage++;
-                updateLovePage();
+        ilmaNextBtn.addEventListener('click', function() {
+            if (currentIlmaPage < totalIlmaPages) {
+                currentIlmaPage++;
+                updateIlmaPage();
+            }
+        });
+
+        // ALFA Love Pages Navigation
+        let currentAlfaPage = 1;
+        const totalAlfaPages = 11;
+        const alfaPages = document.querySelectorAll('#alfaContent .love-page');
+        const alfaPrevBtn = document.getElementById('alfaPrev');
+        const alfaNextBtn = document.getElementById('alfaNext');
+        const alfaCounter = document.getElementById('alfaCounter');
+
+        function updateAlfaPage() {
+            alfaPages.forEach(page => page.classList.remove('active'));
+            alfaPages[currentAlfaPage - 1].classList.add('active');
+            alfaPrevBtn.disabled = currentAlfaPage === 1;
+            alfaNextBtn.disabled = currentAlfaPage === totalAlfaPages;
+            alfaCounter.textContent = `${currentAlfaPage} / ${totalAlfaPages}`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        alfaPrevBtn.addEventListener('click', function() {
+            if (currentAlfaPage > 1) {
+                currentAlfaPage--;
+                updateAlfaPage();
+            }
+        });
+
+        alfaNextBtn.addEventListener('click', function() {
+            if (currentAlfaPage < totalAlfaPages) {
+                currentAlfaPage++;
+                updateAlfaPage();
             }
         });
 
@@ -1010,22 +1162,15 @@
         const modal = document.getElementById('modal');
         const closeModal = document.getElementById('closeModal');
 
-        floatBtn.addEventListener('click', () => {
-            modal.classList.add('active');
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-
+        floatBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeModal.addEventListener('click', () => modal.classList.remove('active'));
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
+            if (e.target === modal) modal.classList.remove('active');
         });
 
         // Initialize
-        updateLovePage();
+        updateIlmaPage();
+        updateAlfaPage();
     </script>
 </body>
 </html>
